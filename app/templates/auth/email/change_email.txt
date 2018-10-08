@@ -1,0 +1,11 @@
+Dear {{ user.username }},
+
+确认邮箱更改请将以下链接粘贴到浏览器进行访问:
+
+{{ url_for('auth.change_email', token=token, _external=True) }}
+
+Sincerely,
+
+Doyle.Zeng
+
+注意：请不要回复此邮件。

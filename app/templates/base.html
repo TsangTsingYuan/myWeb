@@ -1,0 +1,95 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Hello, Internet{% endblock %}
+
+{% block head %}
+<!---super() 函数是用于调用父类(超类)的一个方法----->
+{{ super() }}
+<!----<link> 标签定义文档与外部资源的关系  type:规定被链接文档的 MIME 类型
+rel:规定当前文档与被链接文档之间的关系   href:规定被链接文档的位置----->
+<link rel="shortcut icon" href="{{ url_for('static', filename = 'favicon.ico')}}"
+      type="image/x-icon">
+<link rel="icon" href="{{ url_for('static', filename = 'favicon.ico')}}"
+      type="image/x-icon">
+{% endblock %}
+
+{% block scripts %} 
+{{ super() }} 
+{{ moment.include_moment() }}
+{# 中文显示日期 #}
+{{ moment.lang("zh-cn") }}
+{% endblock %}
+ 
+      
+{% block navbar %}
+<!---navbar-inverse黑色背景白色文本,role="navigation"，有助于增加可访问性------->
+<div class="navbar navbar-default" role="navigation">
+        <div class="container"> 
+        <div class="navbar-header"> 
+            <!---data-toggle:需要对按钮做什么  collapse折叠
+            data-target：要切换到哪个元素 
+            三个带有 class .icon-bar 的 <span> 创建所谓的汉堡按钮--------->
+            <button type="button" class="navbar-toggle" 
+             data-toggle="collapse" data-target=".navbar-collapse"> 
+                <span class="sr-only">Toggle navigation切换导航</span> 
+                <span class="icon-bar"></span> 
+                <span class="icon-bar"></span> 
+                <span class="icon-bar"></span> 
+            </button> 
+            <a class="navbar-brand" href="/">Hello, Internet</a> 
+        </div> 
+        <div class="navbar-collapse collapse"> 
+            <ul class="nav navbar-nav"> 
+                <li><a href="/">首页</a></li> 
+                <li><a href="{{ url_for('ai.form') }}">腾讯AI</a></li>
+                <li><a href="{{ url_for('main.about') }}">联系我</a></li>
+            </ul> 
+            <form class="navbar-form navbar-left" role="search" >
+                <div class="form-group">
+                <input type="text" class="form-control" placeholder="搜索" >
+                </div>
+                <button type="submit" class="btn btn-primary" >提交</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.can(Permission.MODERATE_COMMIT) %}
+                    <li><a href="{{ url_for('main.moderate') }}">评论管理</a></li>
+                {% endif %}
+                <!-----current_user(当前登录的用户)由 Flask-Login 定义，且在视图函数和模板中自动可用------>
+                {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('main.user', username=current_user.username) }}"> 个人资料 </a></li>
+                <li class="dropdown">
+	                <button type="button" class="btn dropdown-toggle" id="dropdownMenu1"
+                            data-toggle="dropdown">{{ current_user.username }}
+	                <span class="caret"></span>
+		            <span class="sr-only">切换下拉菜单</span>
+	                </button>
+	                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+		            <li><a href="{{ url_for('auth.change_email_request') }}">更改邮箱</a></li>
+		            <li><a href="#">更改用户名</a></li>
+		            <li><a href="{{ url_for('auth.modify_password') }}">更改密码</a></li>
+		            <li class="divider"></li>
+		            <li><a href="#">分离的链接</a></li>
+                    </ul>
+                </li>
+                <li><a href="{{ url_for('auth.logout') }}"><span class="glyphicon glyphicon-user"></span> 退出</a></li>
+                {% else %}
+                <li><a href="{{ url_for('auth.login') }}"><span class="glyphicon glyphicon-log-in"></span> 登录/注册</a></li>
+                {% endif %}
+            </ul>
+        </div> 
+    </div> 
+</div> 
+{% endblock %} 
+ 
+{% block content %} 
+<div class="container"> 
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <!-----关闭按钮----->
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% block page_content %}{% endblock %}
+</div> 
+{% endblock %}

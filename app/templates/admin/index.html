@@ -1,0 +1,16 @@
+{% extends 'admin/master.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block body %}
+    {#不要忘记super，很重要#}
+    {{ super() }}
+  {% if current_user.is_authenticated %}
+     <span><div>欢迎 {{ current_user.username }} 登录管理后台。</div>
+      <div>可以通过后台进行数据库管理、文章评论管理等！</div>
+       <div><a href="{{ url_for('.logout') }}"><span class="glyphicon glyphicon-user"></span> 退出</a></div></span>
+  {% else %}
+    <span><div>用户还未登录，无法进行操作！</div>
+      <div><a href="{{ url_for('.login') }}"><span class="glyphicon glyphicon-log-in"></span> 登录/注册</a></div></span>
+  {% endif %}
+
+{% endblock %}

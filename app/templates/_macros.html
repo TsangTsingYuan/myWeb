@@ -1,0 +1,38 @@
+<!--pagination:分页   endpoint：路由端点-------->
+{% macro pagination_widget(pagination, endpoint, fragment='') %}
+<ul class="pagination">
+    <!--如果没有前一页则禁用<<(是第一页)  -------->
+    <li {% if not pagination.has_prev %} class="disabled"{% endif %}>
+        <a href="{% if pagination.has_prev %}{{ url_for(endpoint, page=pagination.prev_num, **kwargs) }}{{ fragment }}{% else %}#{% endif %}">
+            &laquo;
+        </a>
+    </li>
+    <!--iter_pages() 迭代器返回的所有页面链接  -------->
+    <!---例：100页的列表默认配置，这个方法会返回以下页数：1、2、None、48、49、50、51、52、53、54、
+    55、None、99、100。None 表示页数之间的间隔------->
+    {% for p in pagination.iter_pages() %}
+        <!------返回页数---->
+        {% if p %}
+            <!-----当前页 active------->
+            {% if p == pagination.page %}
+            <li class="active">
+                <a href="{{ url_for(endpoint, page = p, **kwargs) }}{{ fragment }}">{{ p }}</a>
+            </li>
+            {% else %}
+            <li>
+                <a href="{{ url_for(endpoint, page = p, **kwargs) }}{{ fragment }}">{{ p }}</a>
+            </li>
+            {% endif %}
+        <!----返回None---->
+        {% else %}
+        <li class="disabled"><a href="#">&hellip;</a></li>
+        {% endif %}
+    {% endfor %}
+    <!----最后一页则disable>>  ----->
+    <li {% if not pagination.has_next %} class="disabled"{% endif %}>
+        <a href="{% if pagination.has_next %}{{ url_for(endpoint, page=pagination.next_num, **kwargs) }}{{ fragment }}{% else %}#{% endif %}">
+            &raquo;
+        </a>
+    </li>
+</ul>
+{% endmacro %}

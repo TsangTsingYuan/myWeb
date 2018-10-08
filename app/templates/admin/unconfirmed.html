@@ -1,0 +1,11 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<div class="page-header">
+    <h1>
+        你好, {{ current_user.username }}!
+    </h1>
+    <h3>你还未确认你的帐户，请联系管理员确认帐户！</h3>
+
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %} 
+{% import "bootstrap/wtf.html" as wtf %} 
+ 
+{% block title %}Hello, Internet - 编辑文章{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>编辑文章</h1>
+</div>
+<div>
+    {{ wtf.quick_form(form) }}
+    <!----引入CKEditor的JavaScript等资源文件------>
+    <script src="{{ url_for('static', filename = 'ckeditor/ckeditor.js')}}"></script>
+    <!---{{ ckeditor.load() }}--->
+    <!----对CKEditor进行配置和初始化，并将name参数的值设为CKEditor字段的属性名，这里即body----->
+    <script type="text/javascript">CKEDITOR.replace('body', {filebrowserUploadUrl: '../ckupload/',});</script>
+    <!---{{ ckeditor.config(name='body') }}--->
+</div>
+{% endblock %}
+

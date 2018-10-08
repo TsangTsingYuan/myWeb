@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block title %}图片上传OCR{% endblock %}
+
+{% block page_content %}
+    <ul class="nav nav-tabs">
+            <li class="active"><a href="{{ url_for('.form')}}" >OCR</a></li>
+
+            <li><a href="{{ url_for('.trans')}}" >翻译</a></li>
+
+    </ul>
+    <h1>采用腾讯AI接口</h1>
+    {{ wtf.quick_form(form) }}
+    {# 注释掉  <a href="{{ url_for('ai.show', filename=filename) }}">查看图片</a> #}
+{% endblock %}
+

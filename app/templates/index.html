@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Hello, Internet{% endblock %}
+
+{% block page_content %}
+    <div class="page-header">
+        <h1>Hello, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Internet{% endif %}!</h1>
+        <p>本站采用<b> Flask + Bootstrap </b>进行设计</p>
+        {% if not known %}
+        <p>Please to meet you!</p>
+        {% else %}
+        <p>Happy to see you again!</p>
+        {% endif %}
+    </div> 
+    <div class="post-tabs">
+        <ul class="nav nav-tabs">
+            <li {% if not show_followed %} class="active"{% endif %}><a href="{{ url_for('.show_all') }}">所有</a></li>
+            {% if current_user.is_authenticated %}
+            <li {% if show_followed %} class="active"{% endif %}><a href="{{ url_for('.show_followed') }}">关注</a></li>
+            {% endif %}
+        </ul>
+        {% include '_posts_index.html' %}
+    </div>
+    <div class="pagination">
+    {{ macros.pagination_widget(pagination, '.index') }}
+    </div>
+    <div>
+    {% if current_user.can(Permission.WRITE_ARTICLES) %}
+        {{ wtf.quick_form(form) }}
+        <!----引入CKEditor的JavaScript等资源文件------>
+        <script src="{{ url_for('static', filename = 'ckeditor/ckeditor.js')}}"></script>
+        <!----开启上传功能，filebrowserUploadUrl ：文件上传路径, '../ckupload/'：路由见main.view
+        参考：http://python.jobbole.com/84565/，对config.js操作无法导入生效(是不是要全局才可以用？)----->
+        <script type="text/javascript">CKEDITOR.replace('body', {filebrowserUploadUrl: '../ckupload/',});</script>
+
+    {% endif %}
+    </div>
+{% endblock %}
+
+
+
+
+
+

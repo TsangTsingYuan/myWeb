@@ -1,0 +1,8 @@
+<p>尊敬的 {{ user.username }},</p>
+<p>欢迎注册 <b>Hello, Internet</b>!</p>
+<p>请点击 <a href="{{ url_for('auth.confirm', token=token, _external=True) }}">确认帐户</a>.</p>
+<p>或者将以下链接粘贴到浏览器进行访问:</p>
+<p>{{ url_for('auth.confirm', token=token, _external=True) }}</p>
+<p>欢迎您的加入。</p>
+<p>Doyle.Zeng</p>
+<p><small>注意：请不要回复此邮件。</small></p>
